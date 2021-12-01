@@ -75,9 +75,9 @@ proba_pred = predict['predictions']
 
 #Affichage Crédit accepté/refusé
 if proba_pred < 0.52:
-    st.write("Crédit : <span style='color:green;'> APPROVED </span>",unsafe_allow_html=True)
+    st.write("<span style='text-align:center;color:green;font-size:18px;'> APPROVED </span>",unsafe_allow_html=True)
 else:
-    st.write("Crédit : <span style='color:red;'> REFUSED </span>",unsafe_allow_html=True)
+    st.write("<span style='text-align:center;color:red;font-size:18px;'> REFUSED </span>",unsafe_allow_html=True)
 
 #jauge de score de risque
 fig = go.Figure(go.Indicator(
