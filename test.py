@@ -157,7 +157,7 @@ x1 = clients_pred.loc[clients_pred['PRED'] == 0, var_1]
 x2 = clients_pred.loc[clients_pred['PRED'] == 1, var_1]
 x=clients_pred.loc[id_client][var_1]
 
-def distplots(data,var)
+#def distplots(data,var):
 
 plot_v1 = ff.create_distplot([x1,x2], [0,1], show_hist=False, colors=['green','red']).add_vline(x,line_width=2,line_dash="dash",line_color="orange",annotation_text="Client",annotation_font_size=18)
 plot_v1.update_layout(height=600)
