@@ -58,7 +58,7 @@ clients_pred = pd.read_csv('sample_pred.csv')
 clients_pred.set_index('SK_ID_CURR', inplace = True)
 
 #Titre
-st.title("<span style='font-size:50px;'> Customer Dashboard : Loans </span>",unsafe_allow_html=True))
+st.title("<span style='font-size:50px;'> Customer Dashboard : Loans </span>",unsafe_allow_html=True)
 
 #liste pour sélectionner un client
 id_client = st.selectbox('Please select a Client ID :',clients.index )
