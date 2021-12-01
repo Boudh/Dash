@@ -157,11 +157,21 @@ x1 = clients_pred.loc[clients_pred['PRED'] == 0, var_1]
 x2 = clients_pred.loc[clients_pred['PRED'] == 1, var_1]
 x=clients_pred.loc[id_client][var_1]
 
-#def distplots(data,var):
+def distplots(data,var,height=600):
+    x1 = data.loc[data['PRED'] == 0, var]
+    x2 = data.loc[data['PRED'] == 1, var]
+    x=data.loc[id_client][var]
+    plot = ff.create_distplot([x1,x2], [0,1], show_hist=False, colors=['green','red'])
+    plot.add_vline(x,line_width=2,line_dash="dash",line_color="orange",annotation_text="Client",annotation_font_color='orange',annotation_font_size=18)
+    plot.update_layout(height=height)
+    return plot
 
 plot_v1 = ff.create_distplot([x1,x2], [0,1], show_hist=False, colors=['green','red']).add_vline(x,line_width=2,line_dash="dash",line_color="orange",annotation_text="Client",annotation_font_color='orange',annotation_font_size=18)
 plot_v1.update_layout(height=600)
 st.plotly_chart(plot_v1, use_container_width=True)
+
+st.write("avec fonction")
+st.plotly_chart(distplots(clients_pred,var_1), use_container_width=True)
 
 
 list_2=top_ten.drop(top_ten[top_ten['col_name']==var_1].index)
