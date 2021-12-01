@@ -32,7 +32,7 @@ def distplots(data,var,height=600):
     plot = ff.create_distplot([x1,x2], [0,1], show_hist=False, colors=['green','red'])
     plot.add_vline(x,line_width=2,line_dash="dash",line_color="orange",annotation_text="Client",annotation_font_color='orange',annotation_font_size=18)
     plot.update_layout(height=height)
-    titre = "Distribution de la variable "+var+" & Positionnement du client"
+    titre = "Distribution de la variable: "+var+"\n& Positionnement du client"
     plot.update_layout(title_text=titre)
     return plot
 
@@ -174,7 +174,7 @@ with st.expander("Plus de détail"):
     st.plotly_chart(distplots(clients_pred,var_2), use_container_width=True)
 
     st.write("Analyse bivariée :")
-    titre="Croisement des variables "+var_1+" & "+var_2
+    titre="Croisement des variables :\n"+var_1+" & "+var_2
     scat_plot = px.scatter(clients_pred, x=var_1, y=var_2, color="SCORE",
     title=titre, color_continuous_scale='rdylgn_r')
     st.plotly_chart(scat_plot, use_container_width=True)
