@@ -30,6 +30,9 @@ def st_shap(plot, height=None):
 
 test_path = os.path.dirname(os.path.abspath(__file__))
 st.write(test_path)
+files = os.listdir(test_path)
+for f in files:
+    st.write(f)
 #st.write(test_path+'\modele.sav')
 model = joblib.load(test_path+'\modele.sav')
 explainer = joblib.load(test_path+'\explainer.sav')
