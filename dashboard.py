@@ -58,7 +58,7 @@ clients_pred = pd.read_csv('sample_pred.csv')
 clients_pred.set_index('SK_ID_CURR', inplace = True)
 
 #Titre
-st.title("<span style='font-size:50px;'> Customer Dashboard : Loans </span>",unsafe_allow_html=True)
+st.title(" Customer Dashboard : Loans")
 
 #liste pour sélectionner un client
 id_client = st.selectbox('Please select a Client ID :',clients.index )
@@ -76,11 +76,11 @@ proba_pred = predict['predictions']
 #Affichage Crédit accepté/refusé
 texte = "Loan for client ID : "+identif
 if proba_pred < 0.52:
-    texte = texte + "<span style='color:green;'> APPROVED </span>"
-    st.title(texte,unsafe_allow_html=True)
+    texte = texte + "<span style='color:green;font-size:20px;'> APPROVED </span>"
+    st.write(texte,unsafe_allow_html=True)
 else:
-    texte = texte + "<span style='color:red;'> REFUSED </span>"
-    st.title(texte,unsafe_allow_html=True)
+    texte = texte + "<span style='color:red;font-size:20px;'> REFUSED </span>"
+    st.write(texte,unsafe_allow_html=True)
 
 #jauge de score de risque
 fig = go.Figure(go.Indicator(
