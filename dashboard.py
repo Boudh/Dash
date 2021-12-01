@@ -113,7 +113,7 @@ with st.expander("Local Feature Importance"):
     st.write('This graph shows the value of the features that weighed the most in the algorithm\'s decision')
     st.write('Base Value : ', shap_base)
     st.write("<span style='color:violet;'>Features that raise the output relative to the base value </span>", unsafe_allow_html=True)
-    st.write("<span style='color:blue;'>Features that decrease the output from the base value </span>", unsafe_allow_html=True)
+    st.write("<span style='color:lightblue;'>Features that decrease the output from the base value </span>", unsafe_allow_html=True)
     st.write("If output > base value : <span style='color:red;'> Loan Refused </span>", unsafe_allow_html=True)
     st.write("If output < base value : <span style='color:green;'> Loan Approved </span>", unsafe_allow_html=True)
 
