@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import os
 import plotly.figure_factory as ff
+import plotly.express as px
+
 
 import requests
 
@@ -21,6 +23,16 @@ shap.initjs()
 def get_data(url):
     resp = requests.get(url)
     return resp.json()
+
+#fonction pour tracer des distplots
+def distplots(data,var,height=600):
+    x1 = data.loc[data['PRED'] == 0, var]
+    x2 = data.loc[data['PRED'] == 1, var]
+    x=data.loc[id_client][var]
+    plot = ff.create_distplot([x1,x2], [0,1], show_hist=False, colors=['green','red'])
+    plot.add_vline(x,line_width=2,line_dash="dash",line_color="orange",annotation_text="Client",annotation_font_color='orange',annotation_font_size=18)
+    plot.update_layout(height=height)
+    return plot
 
 #fonction shap plots
 #def st_shap(plot, height=None):
@@ -111,7 +123,7 @@ with st.expander("Local Feature Importance"):
     st.write('En violet: les variables qui font monter la sortie par rapport à la valeur de base')
     st.write('En bleu: les variables qui font baisser la sortie par rapport à la valeur de base')
     st.write('Si sortie > valeur de base : Crédit Refusé')
-    st.write('Si sortie > valeur de base : Crédit Accepté')
+    st.write('Si sortie < valeur de base : Crédit Accepté')
 
 
 #feature importance globale
@@ -145,65 +157,71 @@ top_ten = pd.DataFrame(top_ten)
  #   sns.kdeplot(data.loc[data['PRED'] == 0, var], label = 'TARGET == 0')
   #  sns.kdeplot(data.loc[data['PRED'] == 1, var], label = 'TARGET == 1').axvline(x)
 
-#liste pour séléctionner la 1ere feature 
-var_1 = st.selectbox('Please select a feature :',top_ten)
+#Plus d'informations
+with st.expander("Plus de détail"):
+    #liste pour séléctionner la 1ere feature 
+    st.write('Veuillez sélectionner 2 features à analyser :')
+    var_1 = st.selectbox('1ère Feature :',top_ten)
+    list_2=top_ten.drop(top_ten[top_ten['col_name']==var_1].index)
+    var_2 = st.selectbox('2ème Feature :',list_2)
+
+    with st.expander("Analyse univarié & Positionnement du Client :"):
+        #var 1
+        st.plotly_chart(distplots(clients_pred,var_1), use_container_width=True)
+        #var 2
+        st.plotly_chart(distplots(clients_pred,var_2), use_container_width=True)
+
+    with st.expander("Analyse bivariée :"):
+        scat_plot = px.scatter(clients_pred, x=var_1, y=var_2, color="SCORE",
+        title="TITRE", color_continuous_scale='rdylgn_r')
+        st.plotly_chart(scat_plot, use_container_width=True)
+
+
+
 #st.write(var_1, ' Séléctionnée !')
 #st.write(clients_pred.loc[id_client][var_1])
 
 #st.pyplot(feats_plot(id_client,clients_pred,var_1))
 
 #st.write('Plotly :')
-x1 = clients_pred.loc[clients_pred['PRED'] == 0, var_1]
-x2 = clients_pred.loc[clients_pred['PRED'] == 1, var_1]
-x=clients_pred.loc[id_client][var_1]
-
-def distplots(data,var,height=600):
-    x1 = data.loc[data['PRED'] == 0, var]
-    x2 = data.loc[data['PRED'] == 1, var]
-    x=data.loc[id_client][var]
-    plot = ff.create_distplot([x1,x2], [0,1], show_hist=False, colors=['green','red'])
-    plot.add_vline(x,line_width=2,line_dash="dash",line_color="orange",annotation_text="Client",annotation_font_color='orange',annotation_font_size=18)
-    plot.update_layout(height=height)
-    return plot
-
-plot_v1 = ff.create_distplot([x1,x2], [0,1], show_hist=False, colors=['green','red']).add_vline(x,line_width=2,line_dash="dash",line_color="orange",annotation_text="Client",annotation_font_color='orange',annotation_font_size=18)
-plot_v1.update_layout(height=600)
-st.plotly_chart(plot_v1, use_container_width=True)
-
-st.write("avec fonction")
-st.plotly_chart(distplots(clients_pred,var_1), use_container_width=True)
+#x1 = clients_pred.loc[clients_pred['PRED'] == 0, var_1]
+#x2 = clients_pred.loc[clients_pred['PRED'] == 1, var_1]
+#x=clients_pred.loc[id_client][var_1]
 
 
-list_2=top_ten.drop(top_ten[top_ten['col_name']==var_1].index)
 
-var_2 = st.selectbox('Please select a feature :',list_2)
+#plot_v1 = ff.create_distplot([x1,x2], [0,1], show_hist=False, colors=['green','red']).add_vline(x,line_width=2,line_dash="dash",line_color="orange",annotation_text="Client",annotation_font_color='orange',annotation_font_size=18)
+#plot_v1.update_layout(height=600)
+#st.plotly_chart(plot_v1, use_container_width=True)
+
+#st.write("avec fonction")
+
+
+
+
 #st.write(var_2, ' Séléctionnée !')
 
 #st.pyplot(feats_plot(id_client,clients_pred,var_2))
 
-x1 = clients_pred.loc[clients_pred['PRED'] == 0, var_2]
-x2 = clients_pred.loc[clients_pred['PRED'] == 1, var_2]
-x=clients_pred.loc[id_client][var_2]
+#x1 = clients_pred.loc[clients_pred['PRED'] == 0, var_2]
+#x2 = clients_pred.loc[clients_pred['PRED'] == 1, var_2]
+#x=clients_pred.loc[id_client][var_2]
 
-plot_v2 = ff.create_distplot([x1,x2], [0,1], show_hist=False, colors=['green','red']).add_vline(x,line_width=2,line_dash="dash",annotation_text="Client",annotation_font_size=18)
-plot_v2.update_layout(height=600)
-st.plotly_chart(plot_v2, use_container_width=True)
+#plot_v2 = ff.create_distplot([x1,x2], [0,1], show_hist=False, colors=['green','red']).add_vline(x,line_width=2,line_dash="dash",annotation_text="Client",annotation_font_size=18)
+#plot_v2.update_layout(height=600)
+#st.plotly_chart(plot_v2, use_container_width=True)
 
 #bivarié
-color_map = plt.cm.get_cmap('RdYlGn')
-col_map = color_map.reversed()
+#color_map = plt.cm.get_cmap('RdYlGn')
+#col_map = color_map.reversed()
 
-def biplot(v1,v2,data,colmap,hue):
-    plt.scatter(data[v1],data[v2],c=data[hue],cmap=colmap)
+#def biplot(v1,v2,data,colmap,hue):
+ #   plt.scatter(data[v1],data[v2],c=data[hue],cmap=colmap)
     #plt.colorbar
 
 #st.pyplot(biplot(var_1,var_2,clients_pred,col_map,'SCORE'))
-import plotly.express as px
 
-scat_plot = px.scatter(clients_pred, x=var_1, y=var_2, color="SCORE",
-                 title="TITRE", color_continuous_scale='rdylgn_r')
 
-st.plotly_chart(scat_plot, use_container_width=True)
 
 #st.write(top_ten)
 
