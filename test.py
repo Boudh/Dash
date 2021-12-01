@@ -26,34 +26,36 @@ def st_shap(plot, height=None):
     shap_html = f"<head>{shap.getjs()}</head><body>{plot.html()}</body>"
     components.html(shap_html, height=height)
 
-#chargement du modèle
-
-test_path = os.path.dirname(os.path.abspath(__file__))
-st.write(test_path)
-files = os.listdir(test_path)
-for f in files:
-    st.write(f)
+#test_path = os.path.dirname(os.path.abspath(__file__))
+#st.write(test_path)
+#files = os.listdir(test_path)
+#for f in files:
+#    st.write(f)
 #st.write(test_path+'\modele.sav')
+
+#chargement du modèle
 model = joblib.load('modele.sav')
+
+#chargement de l'explainer SHAP
 explainer = joblib.load('explainer.sav')
-#model = joblib.load('C:/Users/Raphaël/Documents/1_Formation_OC/P7/modele.sav')
 
 #chargement des fichiers de travail
+#chargement de l'échantillon
 clients = pd.read_csv('sample.csv')
-#clients = pd.read_csv('C:/Users/Raphaël/Documents/1_Formation_OC/P7/Data/sample.csv')
+#colonne SK_ID_CURR en index
 clients.set_index('SK_ID_CURR', inplace = True)
-#clients_train = pd.read_csv('C:/Users/Raphaël/Documents/1_Formation_OC/P7/Data/clients_train.csv')
+
+#chargement des résultats de la prédiction (pour les graphs)
 clients_pred = pd.read_csv('sample_pred.csv')
-#clients_pred = pd.read_csv('C:/Users/Raphaël/Documents/1_Formation_OC/P7/Data/sample_pred.csv')
+#colonne SK_ID_CURR en index
 clients_pred.set_index('SK_ID_CURR', inplace = True)
 
-#
+#Titre
 st.title('Customer Dashboard : Loans')
 
 #liste pour sélectionner un client
 id_client = st.selectbox('Please select a Client ID :',clients.index )
 id_client = int(id_client)
-
 
 #url de requetage en fonction de l'ID client
 url = "https://apipred.herokuapp.com/predict/"
@@ -61,25 +63,23 @@ identif = str(id_client) #"397043"
 url_req = url + identif
 
 #résultat de la requête
-#st.write('hello')
 predict = get_data(url_req)
 proba_pred = predict['predictions']
-#st.write(predict)
-#st.write(predict['predictions'])
 
+#Affichage Crédit accepté/refusé
 if proba_pred < 0.52:
-    st.write("Crédit <span style='color:green;'>ACCEPTÉ </span>", 
+    st.write("Crédit : <span style='color:green;'> ACCEPTÉ </span>", 
 unsafe_allow_html=True)
 else:
-    st.write("Crédit <span style='color:red;'> REFUSÉ </span>", 
+    st.write("Crédit : <span style='color:red;'> REFUSÉ </span>", 
 unsafe_allow_html=True)
 
-#jauge
+#jauge de score de risque
 fig = go.Figure(go.Indicator(
     domain = {'x': [0, 1], 'y': [0, 1]},
     value = proba_pred,
     mode = "gauge+number+delta",
-    title = {'text': "Risk"},
+    title = {'text': "Risk of Failure"},
     delta = {'reference': 0.52, 
              'increasing':{'color':'red'},
              'decreasing':{'color':'green'}},
@@ -92,10 +92,11 @@ fig = go.Figure(go.Indicator(
 
 st.plotly_chart(fig, use_container_width=True)
 
-#shap
-#explainer = shap.explainers.Linear(model, clients_train, feature_names=clients.columns)
+#récupération des shap_values de notre échantillon
 shap_values = explainer(clients)
+shap_base = shap_values.base_values.mean()
 
+#index de l'ID client renseigné
 idx = clients.index.get_loc(id_client)
 
 #feature importance locale
@@ -103,6 +104,13 @@ waterfall = shap.plots.waterfall(shap_values[idx])
 
 st.write('Feature importance locale :')
 st.write('Ce graphique présente la valeur des variables qui ont pesée le plus dans la décision de l\'algorithme')
+st.write('Valeur de base : ', shap_base)
+st.write('En violet: les variables qui font monter la sortie par rapport à la valeur de base')
+st.write('En bleu: les variables qui font baisser la sortie par rapport à la valeur de base')
+st.write('Si sortie > valeur de base : Crédit Refusé')
+st.write('Si sortie > valeur de base : Crédit Accepté')
+
+
 
 st.pyplot(waterfall)
 
