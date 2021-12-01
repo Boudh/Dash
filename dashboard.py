@@ -58,7 +58,7 @@ clients_pred = pd.read_csv('sample_pred.csv')
 clients_pred.set_index('SK_ID_CURR', inplace = True)
 
 #Titre
-st.title('Customer Dashboard : Loans')
+st.title("<span style='font-size:50px;'> Customer Dashboard : Loans </span>",unsafe_allow_html=True))
 
 #liste pour sélectionner un client
 id_client = st.selectbox('Please select a Client ID :',clients.index )
@@ -66,7 +66,7 @@ id_client = int(id_client)
 
 #url de requetage en fonction de l'ID client
 url = "https://apipred.herokuapp.com/predict/"
-identif = str(id_client) #"397043"
+identif = str(id_client) 
 url_req = url + identif
 
 #résultat de la requête
@@ -74,10 +74,13 @@ predict = get_data(url_req)
 proba_pred = predict['predictions']
 
 #Affichage Crédit accepté/refusé
+texte = "Loan for client ID : "+identif
 if proba_pred < 0.52:
-    st.write("<span style='text-align:center;color:green;font-size:18px;'> APPROVED </span>",unsafe_allow_html=True)
+    texte = texte + "<span style='color:green;'> APPROVED </span>"
+    st.title(texte,unsafe_allow_html=True)
 else:
-    st.write("<span style='text-align:center;color:red;font-size:18px;'> REFUSED </span>",unsafe_allow_html=True)
+    texte = texte + "<span style='color:red;'> REFUSED </span>"
+    st.title(texte,unsafe_allow_html=True)
 
 #jauge de score de risque
 fig = go.Figure(go.Indicator(
