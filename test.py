@@ -165,16 +165,16 @@ with st.expander("Plus de détail"):
     list_2=top_ten.drop(top_ten[top_ten['col_name']==var_1].index)
     var_2 = st.selectbox('2ème Feature :',list_2)
 
-    with st.expander("Analyse univarié & Positionnement du Client :"):
-        #var 1
-        st.plotly_chart(distplots(clients_pred,var_1), use_container_width=True)
-        #var 2
-        st.plotly_chart(distplots(clients_pred,var_2), use_container_width=True)
+    st.write("Analyse univarié & Positionnement du Client :"):
+    #var 1
+    st.plotly_chart(distplots(clients_pred,var_1), use_container_width=True)
+    #var 2
+    st.plotly_chart(distplots(clients_pred,var_2), use_container_width=True)
 
-    with st.expander("Analyse bivariée :"):
-        scat_plot = px.scatter(clients_pred, x=var_1, y=var_2, color="SCORE",
-        title="TITRE", color_continuous_scale='rdylgn_r')
-        st.plotly_chart(scat_plot, use_container_width=True)
+    st.write("Analyse bivariée :"):
+    scat_plot = px.scatter(clients_pred, x=var_1, y=var_2, color="SCORE",
+    title="TITRE", color_continuous_scale='rdylgn_r')
+    st.plotly_chart(scat_plot, use_container_width=True)
 
 
 
