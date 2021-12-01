@@ -75,11 +75,9 @@ proba_pred = predict['predictions']
 
 #Affichage Crédit accepté/refusé
 if proba_pred < 0.52:
-    st.write("Crédit : <span style='color:green;'> APPROVED </span>", 
-unsafe_allow_html=True)
+    st.write("Crédit : <span style='color:green;'> APPROVED </span>",unsafe_allow_html=True)
 else:
-    st.write("Crédit : <span style='color:red;'> REFUSED </span>", 
-unsafe_allow_html=True)
+    st.write("Crédit : <span style='color:red;'> REFUSED </span>",unsafe_allow_html=True)
 
 #jauge de score de risque
 fig = go.Figure(go.Indicator(
@@ -114,10 +112,10 @@ with st.expander("Local Feature Importance"):
     st.pyplot(waterfall)
     st.write('This graph shows the value of the features that weighed the most in the algorithm\'s decision')
     st.write('Base Value : ', shap_base)
-    st.write("<span style='color:violet;'>Features that raise the output relative to the base value </span>")
-    st.write("<span style='color:blue;'>Features that decrease the output from the base value </span>")
-    st.write("If output > base value : <span style='color:red;'> Loan Refused </span>")
-    st.write("If output < base value : <span style='color:green;'> Loan Approved </span>")
+    st.write("<span style='color:violet;'>Features that raise the output relative to the base value </span>", unsafe_allow_html=True)
+    st.write("<span style='color:blue;'>Features that decrease the output from the base value </span>", unsafe_allow_html=True)
+    st.write("If output > base value : <span style='color:red;'> Loan Refused </span>", unsafe_allow_html=True)
+    st.write("If output < base value : <span style='color:green;'> Loan Approved </span>", unsafe_allow_html=True)
 
 
 #feature importance globale
