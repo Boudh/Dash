@@ -75,10 +75,10 @@ proba_pred = predict['predictions']
 
 #Affichage Crédit accepté/refusé
 if proba_pred < 0.52:
-    st.write("Crédit : <span style='color:green;'> ACCEPTÉ </span>", 
+    st.write("Crédit : <span style='color:green;'> APPROVED </span>", 
 unsafe_allow_html=True)
 else:
-    st.write("Crédit : <span style='color:red;'> REFUSÉ </span>", 
+    st.write("Crédit : <span style='color:red;'> REFUSED </span>", 
 unsafe_allow_html=True)
 
 #jauge de score de risque
@@ -112,12 +112,12 @@ waterfall = shap.plots.waterfall(shap_values[idx])
 with st.expander("Local Feature Importance"):
     
     st.pyplot(waterfall)
-    st.write('Ce graphique présente la valeur des variables qui ont pesée le plus dans la décision de l\'algorithme')
-    st.write('Valeur de base : ', shap_base)
-    st.write('En violet: les variables qui font monter la sortie par rapport à la valeur de base')
-    st.write('En bleu: les variables qui font baisser la sortie par rapport à la valeur de base')
-    st.write('Si sortie > valeur de base : Crédit Refusé')
-    st.write('Si sortie < valeur de base : Crédit Accepté')
+    st.write('This graph shows the value of the features that weighed the most in the algorithm\'s decision')
+    st.write('Base Value : ', shap_base)
+    st.write("<span style='color:violet;'>Features that raise the output relative to the base value </span>")
+    st.write("<span style='color:blue;'>Features that decrease the output from the base value </span>")
+    st.write("If output > base value : <span style='color:red;'> Loan Refused </span>")
+    st.write("If output < base value : <span style='color:green;'> Loan Approved </span>")
 
 
 #feature importance globale
@@ -126,12 +126,12 @@ summary_plot = shap.summary_plot(shap_values, max_display=10)
 with st.expander("Global Feature Importance"):
 
     st.pyplot(summary_plot)
-    st.write('Ce graphique présente les 10 variables qui ont le plus de poids dans toutes les décisions de l\'algorithme ')
-    st.write('L\'axe x montre la distribution des valeurs de chaques variables')
-    st.write('La couleur permet de savoir l\'impact de la valeur de la variable sur la valeur de sortie')
-    st.write('Par exemple :')
-    st.write('EXT_SOURCE_2 : des valeurs élevées de cette variable, a droite de l\'axe vertical, vont impacter négativement la valeur de sortie')
-    st.write('bureau_DAYS_CREDIT_sum : à l\'inverse de EXT_SOURCE_2, des valeurs élevées de cette variable vont impacter positivement la veleur de la sortie')
+    st.write('This graph shows the 10 features that have the most weight in all decisions of the algorithm')
+    st.write('The x axis shows the distribution of values for each variable')
+    st.write('The color indicates the impact of the value of the variable on the output value')
+    st.write('For exemple :')
+    st.write('EXT_SOURCE_2 : high values of this variable, to the right of the vertical axis, will negatively impact the output value')
+    st.write('bureau_DAYS_CREDIT_sum : unlike EXT_SOURCE_2, high values of this variable will positively impact the value of the output')
 
 #On récupère le 10 features les plus importantes 
 feature_names = shap_values.feature_names
@@ -143,21 +143,21 @@ top_ten = shap_importance['col_name'].head(10).reset_index(drop=True)
 top_ten = pd.DataFrame(top_ten)
 
 #Plus d'informations
-with st.expander("Plus de détail"):
+with st.expander("More details"):
     #liste pour séléctionner la 1ere feature 
-    st.write('Veuillez sélectionner 2 features à analyser :')
-    var_1 = st.selectbox('1ère Feature :',top_ten)
+    st.write('Please select 2 features to analyze :')
+    var_1 = st.selectbox('1st Feature :',top_ten)
     list_2=top_ten.drop(top_ten[top_ten['col_name']==var_1].index)
-    var_2 = st.selectbox('2ème Feature :',list_2)
+    var_2 = st.selectbox('2nd Feature :',list_2)
 
-    st.write("Analyse univarié & Positionnement du Client :")
+    st.write("Univariate Analysis & Client Positioning:")
     #var 1
     st.plotly_chart(distplots(clients_pred,var_1), use_container_width=True)
     #var 2
     st.plotly_chart(distplots(clients_pred,var_2), use_container_width=True)
 
-    st.write("Analyse bivariée :")
-    titre="Croisement des variables : "+var_1+" & "+var_2
+    st.write("Bivariate analysis:")
+    titre="Crossing of variables : "+var_1+" & "+var_2
     scat_plot = px.scatter(clients_pred, x=var_1, y=var_2, color="SCORE",
     title=titre, color_continuous_scale='rdylgn_r')
     st.plotly_chart(scat_plot, use_container_width=True)
