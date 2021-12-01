@@ -34,16 +34,16 @@ files = os.listdir(test_path)
 for f in files:
     st.write(f)
 #st.write(test_path+'\modele.sav')
-model = joblib.load('/modele.sav')
-explainer = joblib.load('/explainer.sav')
+model = joblib.load('modele.sav')
+explainer = joblib.load('explainer.sav')
 #model = joblib.load('C:/Users/Raphaël/Documents/1_Formation_OC/P7/modele.sav')
 
 #chargement des fichiers de travail
-clients = pd.read_csv('/sample.csv')
+clients = pd.read_csv('sample.csv')
 #clients = pd.read_csv('C:/Users/Raphaël/Documents/1_Formation_OC/P7/Data/sample.csv')
 clients.set_index('SK_ID_CURR', inplace = True)
 #clients_train = pd.read_csv('C:/Users/Raphaël/Documents/1_Formation_OC/P7/Data/clients_train.csv')
-clients_pred = pd.read_csv('/sample_pred.csv')
+clients_pred = pd.read_csv('sample_pred.csv')
 #clients_pred = pd.read_csv('C:/Users/Raphaël/Documents/1_Formation_OC/P7/Data/sample_pred.csv')
 clients_pred.set_index('SK_ID_CURR', inplace = True)
 
