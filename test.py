@@ -102,23 +102,29 @@ idx = clients.index.get_loc(id_client)
 #feature importance locale
 waterfall = shap.plots.waterfall(shap_values[idx])
 
-st.write('Feature importance locale :')
-st.write('Ce graphique présente la valeur des variables qui ont pesée le plus dans la décision de l\'algorithme')
-st.write('Valeur de base : ', shap_base)
-st.write('En violet: les variables qui font monter la sortie par rapport à la valeur de base')
-st.write('En bleu: les variables qui font baisser la sortie par rapport à la valeur de base')
-st.write('Si sortie > valeur de base : Crédit Refusé')
-st.write('Si sortie > valeur de base : Crédit Accepté')
+with st.expander("Local Feature Importance"):
+    
+    st.pyplot(waterfall)
+    st.write('Ce graphique présente la valeur des variables qui ont pesée le plus dans la décision de l\'algorithme')
+    st.write('Valeur de base : ', shap_base)
+    st.write('En violet: les variables qui font monter la sortie par rapport à la valeur de base')
+    st.write('En bleu: les variables qui font baisser la sortie par rapport à la valeur de base')
+    st.write('Si sortie > valeur de base : Crédit Refusé')
+    st.write('Si sortie > valeur de base : Crédit Accepté')
 
-
-
-st.pyplot(waterfall)
 
 #feature importance globale
-st.write('Feature importance globale :')
-st.write('Ce graphique présente les variables qui ont le plus de poids dans toutes les décisions de l\'algorithme ')
 summary_plot = shap.summary_plot(shap_values, max_display=10)
-st.pyplot(summary_plot)
+
+with st.expander("Global Feature Importance"):
+
+    st.pyplot(summary_plot)
+    st.write('Ce graphique présente les 10 variables qui ont le plus de poids dans toutes les décisions de l\'algorithme ')
+    st.write('L\'axe x montre la distribution des valeurs de chaques variables')
+    st.write('La couleur permet de savoir l\'impact de la valeur de la variable sur la valeur de sortie')
+    st.write('Par exemple :')
+    st.write('EXT_SOURCE_2 : des valeurs élevées de cette variable, a droite de l\'axe vertical, vont impacter négativement la valeur de sortie')
+    st.write('bureau_DAYS_CREDIT_sum : à l\'inverse de EXT_SOURCE_2, des valeurs élevées de cette variable vont impacter positivement la veleur de la sortie')
 
 #Variables
 
