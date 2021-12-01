@@ -29,7 +29,7 @@ def st_shap(plot, height=None):
 #chargement du modèle
 
 test_path = os.path.dirname(os.path.abspath(__file__))
-#st.write(test_path)
+st.write(test_path)
 #st.write(test_path+'\modele.sav')
 model = joblib.load(test_path+'\modele.sav')
 explainer = joblib.load(test_path+'\explainer.sav')
