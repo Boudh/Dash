@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+import os
 
 import requests
 
@@ -26,13 +27,21 @@ def st_shap(plot, height=None):
     components.html(shap_html, height=height)
 
 #chargement du modèle
-model = joblib.load('C:/Users/Raphaël/Documents/1_Formation_OC/P7/modele.sav')
+
+test_path = os.path.dirname(os.path.abspath(__file__))
+#st.write(test_path)
+#st.write(test_path+'\modele.sav')
+model = joblib.load(test_path+'\modele.sav')
+explainer = joblib.load(test_path+'\explainer.sav')
+#model = joblib.load('C:/Users/Raphaël/Documents/1_Formation_OC/P7/modele.sav')
 
 #chargement des fichiers de travail
-clients = pd.read_csv('C:/Users/Raphaël/Documents/1_Formation_OC/P7/Data/sample.csv')
+clients = pd.read_csv(test_path+'\sample.csv')
+#clients = pd.read_csv('C:/Users/Raphaël/Documents/1_Formation_OC/P7/Data/sample.csv')
 clients.set_index('SK_ID_CURR', inplace = True)
-clients_train = pd.read_csv('C:/Users/Raphaël/Documents/1_Formation_OC/P7/Data/clients_train.csv')
-clients_pred = pd.read_csv('C:/Users/Raphaël/Documents/1_Formation_OC/P7/Data/sample_pred.csv')
+#clients_train = pd.read_csv('C:/Users/Raphaël/Documents/1_Formation_OC/P7/Data/clients_train.csv')
+clients_pred = pd.read_csv(test_path+'\sample_pred.csv')
+#clients_pred = pd.read_csv('C:/Users/Raphaël/Documents/1_Formation_OC/P7/Data/sample_pred.csv')
 clients_pred.set_index('SK_ID_CURR', inplace = True)
 
 #
@@ -81,7 +90,7 @@ fig = go.Figure(go.Indicator(
 st.plotly_chart(fig, use_container_width=True)
 
 #shap
-explainer = shap.explainers.Linear(model, clients_train, feature_names=clients.columns)
+#explainer = shap.explainers.Linear(model, clients_train, feature_names=clients.columns)
 shap_values = explainer(clients)
 
 idx = clients.index.get_loc(id_client)
