@@ -76,10 +76,10 @@ proba_pred = predict['predictions']
 #Affichage Crédit accepté/refusé
 texte = "Loan for client ID : "+identif
 if proba_pred < 0.52:
-    texte = texte + "---> <span style='color:green;font-size:20px;'> APPROVED </span>"
+    texte = texte + "  ---> <span style='color:green;font-size:20px;'> APPROVED </span>"
     st.write(texte,unsafe_allow_html=True)
 else:
-    texte = texte + "---> <span style='color:red;font-size:20px;'> REFUSED </span>"
+    texte = texte + "  ---> <span style='color:red;font-size:20px;'> REFUSED </span>"
     st.write(texte,unsafe_allow_html=True)
 
 #jauge de score de risque
