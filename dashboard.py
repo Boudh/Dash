@@ -97,14 +97,14 @@ fig = go.Figure(go.Indicator(
              'threshold' : {'line': {'color': "black", 'width': 4}, 'thickness': 0.75, 'value': 0.52}}))
 
 st.plotly_chart(fig, use_container_width=True)
-
+st.write(clients.loc[id_client])
 #récupération des shap_values de notre échantillon
 shap_values = explainer(clients)
 shap_base = shap_values.base_values.mean()
 
 #index de l'ID client renseigné
 idx = clients.index.get_loc(id_client)
-st.write(clients[idx])
+
 
 #feature importance locale
 waterfall = shap.plots.waterfall(shap_values[idx])
