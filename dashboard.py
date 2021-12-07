@@ -97,7 +97,11 @@ fig = go.Figure(go.Indicator(
              'threshold' : {'line': {'color': "black", 'width': 4}, 'thickness': 0.75, 'value': 0.52}}))
 
 st.plotly_chart(fig, use_container_width=True)
-st.write(clients.loc[id_client])
+
+#affichage des informations détaillée du client sélectionné
+with st.expander("Detailed customer information :"):
+    st.write(clients.loc[id_client])
+
 #récupération des shap_values de notre échantillon
 shap_values = explainer(clients)
 shap_base = shap_values.base_values.mean()
