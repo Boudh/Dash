@@ -43,8 +43,6 @@ def distplots(data,var,height=600):
     return plot
 
 #chargement des données
-#chargement du modèle
-model = joblib.load('modele.sav')
 #chargement de l'explainer SHAP
 explainer = joblib.load('explainer.sav')
 #chargement des fichiers de travail
@@ -106,6 +104,7 @@ shap_base = shap_values.base_values.mean()
 
 #index de l'ID client renseigné
 idx = clients.index.get_loc(id_client)
+st.write(clients[idx])
 
 #feature importance locale
 waterfall = shap.plots.waterfall(shap_values[idx])
