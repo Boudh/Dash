@@ -100,6 +100,7 @@ st.plotly_chart(fig, use_container_width=True)
 
 #affichage des informations détaillée du client sélectionné
 with st.expander("Detailed customer information :"):
+    st.write("Here you can see the detailed information of the customer :")
     st.write(clients.loc[id_client])
 
 #récupération des shap_values de notre échantillon
@@ -114,14 +115,10 @@ idx = clients.index.get_loc(id_client)
 waterfall = shap.plots.waterfall(shap_values[idx])
 
 with st.expander("Local Feature Importance"):
-    
+    st.write("This graph shows the criteria that most influenced the algorithm's decision")
     st.pyplot(waterfall)
-    st.write('This graph shows the value of the features that weighed the most in the algorithm\'s decision')
-    st.write('Base Value : ', shap_base)
-    st.write("<span style='color:Crimson;'>Features that raise the output relative to the base value </span>", unsafe_allow_html=True)
-    st.write("<span style='color:DodgerBlue;'>Features that decrease the output from the base value </span>", unsafe_allow_html=True)
-    st.write("If output > base value : <span style='color:red;'> Loan Refused </span>", unsafe_allow_html=True)
-    st.write("If output < base value : <span style='color:green;'> Loan Approved </span>", unsafe_allow_html=True)
+    st.write("<span style='color:Crimson;'>Criteria that put the client at risk of defaulting on the loan </span>", unsafe_allow_html=True)
+    st.write("<span style='color:DodgerBlue;'>Criteria that make the client more likely to repay the loan </span>", unsafe_allow_html=True)
 
 
 #feature importance globale
@@ -131,11 +128,8 @@ with st.expander("Global Feature Importance"):
 
     st.pyplot(summary_plot)
     st.write('This graph shows the 10 features that have the most weight in all decisions of the algorithm')
-    st.write('The x axis shows the distribution of values for each variable')
-    st.write('The color indicates the impact of the value of the variable on the output value')
-    st.write('For exemple :')
-    st.write('EXT_SOURCE_2 : high values of this variable, to the right of the vertical axis, will negatively impact the output value')
-    st.write('bureau_DAYS_CREDIT_sum : unlike EXT_SOURCE_2, high values of this variable will positively impact the value of the output')
+    st.write('The horizontal axis shows the impact on the model decision (positive influence, on the right, or negative, on the left).')
+    st.write('The color shows the value of the variable. So for EXT_SOURCE_2, when the variable takes high values (red), it impacts negatively the model.')
 
 #On récupère le 10 features les plus importantes 
 feature_names = shap_values.feature_names
@@ -149,7 +143,7 @@ top_ten = pd.DataFrame(top_ten)
 #Plus d'informations
 with st.expander("More details"):
     #liste pour séléctionner la 1ere feature 
-    st.write('Please select 2 features to analyze :')
+    st.write('You can select 2 variables to see where the client stands in relation to others :')
     var_1 = st.selectbox('1st Feature :',top_ten)
     list_2=top_ten.drop(top_ten[top_ten['col_name']==var_1].index)
     var_2 = st.selectbox('2nd Feature :',list_2)
