@@ -114,7 +114,7 @@ idx = clients.index.get_loc(id_client)
 #feature importance locale
 waterfall = shap.plots.waterfall(shap_values[idx])
 
-with st.expander("Local Feature Importance"):
+with st.expander("Details of the decision"):
     st.write("This graph shows the criteria that most influenced the algorithm's decision")
     st.pyplot(waterfall)
     st.write("<span style='color:Crimson;'>Criteria that put the client at risk of defaulting on the loan </span>", unsafe_allow_html=True)
@@ -124,12 +124,14 @@ with st.expander("Local Feature Importance"):
 #feature importance globale
 summary_plot = shap.summary_plot(shap_values, max_display=10)
 
-with st.expander("Global Feature Importance"):
+with st.expander("Decision criteria of the algorithm"):
 
     st.pyplot(summary_plot)
     st.write('This graph shows the 10 features that have the most weight in all decisions of the algorithm')
     st.write('The horizontal axis shows the impact on the model decision (positive influence, on the right, or negative, on the left).')
-    st.write('The color shows the value of the variable. So for EXT_SOURCE_2, when the variable takes high values (red), it impacts negatively the model.')
+    st.write('The color shows the value of the variable.')
+    st.write('For exemple, for EXT_SOURCE_2, when the variable takes high values (red), it impacts negatively the model.')
+
 
 #On récupère le 10 features les plus importantes 
 feature_names = shap_values.feature_names
