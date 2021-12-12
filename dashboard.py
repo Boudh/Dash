@@ -136,7 +136,7 @@ with st.expander("Decision criteria of the algorithm"):
 #On récupère le 10 features les plus importantes 
 feature_names = shap_values.feature_names
 shap_df = pd.DataFrame(shap_values.values, columns=feature_names)
-vals = np.abs(shap_df.values).mean(0)
+vals = np.abs(shap_df.iloc[idx].values)
 shap_importance = pd.DataFrame(list(zip(feature_names, vals)), columns=['col_name', 'feature_importance_vals'])
 shap_importance.sort_values(by=['feature_importance_vals'], ascending=False, inplace=True)
 top_ten = shap_importance['col_name'].head(10).reset_index(drop=True)
